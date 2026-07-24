@@ -6,9 +6,14 @@
 
 ### Thành viên
 
-| Họ và tên      | MSSV        | Vai trò                     |
-| -------------- | ----------- | --------------------------- |
-| Trần Kiều Oanh | 2A202601417 | Leader / AI Prompt Engineer |
+| Họ và tên          | MSSV        | Vai trò                     |
+| ------------------ | ----------- | --------------------------- |
+| Trần Thị Kiều Oanh | 2A202601417 | Leader / AI Prompt Engineer |
+| Lê Tuấn Hiệp       | 2A202601677 | Thành viên                  |
+| Trần Doãn Hưng     | 2A202601143 | Thành viên                  |
+| Giang Minh Phú     | 2A202601729 | Thành viên                  |
+| Chu Thị Yến Khanh  | 2A202601739 | Thành viên                  |
+| Cao Nam Cường      | 2A202601661 | Thành viên                  |
 
 **Bài toán lựa chọn Deep-Dive:**  
 **Card #1 — Xanh SM (GSM): Hệ thống Trợ lý Điều phối & Xử lý Sự cố Pin Khẩn cấp Thực địa**
