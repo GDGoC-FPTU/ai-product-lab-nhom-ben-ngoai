@@ -1,83 +1,189 @@
-Quyết định lựa chọn
-Dự án AI được chọn
+# 🏗️ Phase 3 & 5 — AI Product Deep-Dive & Evaluation Report
 
-Tên bài toán: AI hỗ trợ tóm tắt hồ sơ bệnh án trước khi bác sĩ khám bệnh.
+## Thông tin nhóm
 
-Công ty thành viên: Vinmec
+**Tên nhóm:** Nhom Ben Ngoai
 
-Lý do lựa chọn:
+### Thành viên
 
-Quy trình đọc hồ sơ bệnh án hiện tại tốn nhiều thời gian.
-Hồ sơ bệnh án chứa nhiều dữ liệu văn bản, phù hợp với khả năng tóm tắt của LLM.
-AI chỉ hỗ trợ tổng hợp thông tin, quyết định chuyên môn vẫn do bác sĩ đưa ra (Human-in-the-loop).
-Có thể đo lường hiệu quả bằng thời gian chuẩn bị và mức độ đầy đủ của bản tóm tắt.
-Phase 3.2 – Problem Statement (6-field)
-Field	Nội dung
-1. Actor / Operator	Bác sĩ khám bệnh tại Vinmec.
-2. Current Workflow	Khi bệnh nhân đến khám, bác sĩ mở hồ sơ bệnh án điện tử (EMR), đọc tiền sử bệnh, kết quả xét nghiệm, đơn thuốc và các lần khám trước, sau đó tổng hợp thông tin quan trọng rồi mới bắt đầu khám và tư vấn. Quy trình hoàn toàn thủ công.
-3. Bottleneck	Việc đọc và tổng hợp hồ sơ bệnh án mất nhiều thời gian, đặc biệt với bệnh nhân có lịch sử điều trị dài hoặc nhiều kết quả xét nghiệm. Trung bình mất khoảng 8–10 phút cho mỗi lượt khám.
-4. Business Impact	Mỗi bác sĩ khám hàng chục bệnh nhân mỗi ngày. Việc dành quá nhiều thời gian đọc hồ sơ làm giảm số lượng bệnh nhân có thể khám, tăng thời gian chờ và ảnh hưởng đến trải nghiệm người bệnh.
-5. Success Metric	(1) Giảm thời gian chuẩn bị từ 10 phút xuống dưới 2 phút. (2) Ít nhất 95% bản tóm tắt chứa đầy đủ các thông tin quan trọng (tiền sử bệnh, dị ứng, kết quả xét nghiệm nổi bật, thuốc đang sử dụng).
-6. Operational Boundary	AI chỉ được phép tóm tắt và làm nổi bật thông tin trong hồ sơ bệnh án. Không được chẩn đoán bệnh, kê đơn hoặc đưa ra quyết định điều trị. Bác sĩ phải xem lại bản tóm tắt trước khi sử dụng trong quá trình khám (Human-in-the-loop).
-Phase 3.3 – Future-State Flow & AI Fit
-AI Fit
- Rule
- LLM Feature
- Agentic Loop
+| Họ và tên      | MSSV        | Vai trò                     |
+| -------------- | ----------- | --------------------------- |
+| Trần Kiều Oanh | 2A202601417 | Leader / AI Prompt Engineer |
 
-Lý do: Dữ liệu chủ yếu là văn bản y khoa và hồ sơ bệnh án, phù hợp với khả năng đọc hiểu và tóm tắt của LLM. AI chỉ đóng vai trò hỗ trợ, không tự đưa ra quyết định điều trị.
+**Bài toán lựa chọn Deep-Dive:**  
+**Card #1 — Xanh SM (GSM): Hệ thống Trợ lý Điều phối & Xử lý Sự cố Pin Khẩn cấp Thực địa**
 
-Future-State Flow
-Bệnh nhân đến khám
-        │
-        ▼
-Hệ thống EMR tự động lấy:
-- Hồ sơ bệnh án
-- Lịch sử khám
-- Kết quả xét nghiệm
-        │
-        ▼
-🔵 AI đọc và tóm tắt hồ sơ
-- Tiền sử bệnh
-- Dị ứng
-- Thuốc đang dùng
-- Kết quả bất thường
-        │
-        ▼
-🟢 Bác sĩ xem lại bản tóm tắt
-        │
-        ▼
-Khám và đưa ra chẩn đoán
-        │
-        ▼
-Lưu kết quả khám vào EMR
-Human-in-the-loop (HITL)
-AI chỉ tạo bản tóm tắt.
-Bác sĩ phải kiểm tra và xác nhận thông tin trước khi sử dụng.
-Quyết định chẩn đoán và điều trị hoàn toàn do bác sĩ thực hiện.
-Fallback
+---
 
-Nếu AI:
+# 🎯 1. Lý do lựa chọn bài toán
 
-Không đọc được hồ sơ.
-Thiếu dữ liệu.
-Bản tóm tắt không đầy đủ.
-Độ tin cậy thấp.
+### Tính cấp thiết
 
-→ Bác sĩ quay lại quy trình cũ: đọc trực tiếp hồ sơ bệnh án điện tử và tự tổng hợp thông tin.
+Sự cố hết pin hoặc mức pin thấp (`SoC < 10%`) trực tiếp ảnh hưởng đến khả năng vận hành đội xe Xanh SM, làm giảm trải nghiệm khách hàng và có nguy cơ gây ùn tắc giao thông.
 
-Phase 5 – EVALUATE
-AI Readiness Checklist
- Chúng tôi có sẵn dữ liệu mẫu/logs sạch để test?
-Có. Dữ liệu gồm hồ sơ bệnh án điện tử (EMR), kết quả xét nghiệm, lịch sử khám và đơn thuốc.
- Rủi ro khi AI sai có nằm trong tầm kiểm soát (qua HITL hoặc Fallback)?
-Có. AI chỉ hỗ trợ tóm tắt, bác sĩ luôn xem lại trước khi sử dụng. Khi AI lỗi sẽ chuyển sang quy trình đọc hồ sơ thủ công.
- Stakeholders sẵn sàng thay đổi quy trình làm việc cũ?
-Có. AI chỉ hỗ trợ giảm thời gian chuẩn bị, không thay đổi vai trò của bác sĩ nên mức độ chấp nhận cao.
-Quyết định cuối cùng của Ban Giám Đốc Vin Smart Future
- GO (Bắt đầu xây dựng Prototype)
- NOT YET
- NO-GO
-Justification
+### Tác động kinh doanh
 
-Dự án có tính khả thi cao vì dữ liệu hồ sơ bệnh án điện tử đã được lưu trữ trên hệ thống EMR và có thể tích hợp với mô hình LLM để tạo bản tóm tắt tự động. AI không thay thế bác sĩ mà chỉ hỗ trợ tổng hợp thông tin, giúp giảm đáng kể thời gian chuẩn bị trước khi khám trong khi vẫn đảm bảo an toàn nhờ cơ chế Human-in-the-loop.
+- Trung bình **80 sự cố/ngày** tại Hà Nội.
+- Tiêu tốn hơn **20 giờ làm việc thủ công/ngày** của tổng đài điều vận.
+- Làm thất thoát doanh thu do hủy chuyến.
+
+### Độ khả thi kỹ thuật
+
+- Dữ liệu GPS xe đã có sẵn.
+- Trạng thái trạm sạc VinFast có API.
+- Phù hợp triển khai bằng **LLM Feature** kết hợp **Rule-based Validation**.
+
+---
+
+# 📊 2. Problem Statement (6-field Standard)
+
+| Field                       | Nội dung                                                                                                                                                                                                                                              |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. Actor / Operator**     | Điều phối viên (Dispatcher) tại Trung tâm Điều vận Xe điện Xanh SM (GSM).                                                                                                                                                                             |
+| **2. Current Workflow**     | Tài xế báo sự cố → Dispatcher mở CRM xem GPS → Tra cứu trạm sạc VinFast phù hợp dòng xe (VF5/e34/VF8) → Soạn hướng dẫn → Gọi cứu hộ nếu `SoC < 5%`.                                                                                                   |
+| **3. Bottleneck**           | Tra cứu trạm sạc tương thích và soạn hướng dẫn thủ công (8–10 phút/lượt).                                                                                                                                                                             |
+| **4. Business Impact**      | Lãng phí khoảng **20 giờ lao động/ngày**, tăng **15%** tỷ lệ hủy chuyến và làm tăng áp lực cho tài xế.                                                                                                                                                |
+| **5. Success Metric**       | - Giảm thời gian xử lý từ **15 phút → dưới 3 phút**.<br>- Độ chính xác đề xuất trạm sạc **≥ 98%**.                                                                                                                                                    |
+| **6. Operational Boundary** | **Được phép:** Truy vấn GPS, gọi API trạm sạc, tạo bản nháp hướng dẫn (`[DRAFT_ONLY]`).<br><br>**Không được phép:** AI tự gửi SMS/Push Notification khi chưa có xác nhận của Dispatcher; không đề xuất trạm sạc cách xe trên **5 km** nếu `SoC < 5%`. |
+
+---
+
+# 🔄 3. Future-State Workflow & AI Architecture
+
+## AI Fit Level
+
+**LLM Feature**
+
+> Xử lý trích xuất ngữ cảnh, tổng hợp thông tin trạm sạc và sinh hướng dẫn chuẩn hóa.
+
+### Quy trình vận hành tương lai
+
+```text
+┌────────────────┐     ┌────────────────────────┐     ┌────────────────────────┐
+│ Bước 1         │     │ Bước 2 (🔵 AI Step)    │     │ Bước 3 (🔵 AI Step)    │
+│                │ ──► │ Tự động truy vấn GPS   │ ──► │ LLM phân tích, lọc     │
+│ Tài xế gửi     │     │ xe và API trạm sạc     │     │ trạm sạc phù hợp và    │
+│ báo sự cố pin  │     │ VinFast lân cận        │     │ tạo Draft SMS          │
+└────────────────┘     └────────────────────────┘     └────────────────────────┘
+                                                                  │
+                                                                  ▼
+┌────────────────┐     ┌────────────────────────┐     ┌────────────────────────┐
+│ Bước 5         │ ◄── │ Fallback               │ ◄── │ Bước 4 (🟢 HITL)       │
+│                │     │                        │     │                        │
+│ Tài xế nhận    │     │ Nếu AI lỗi hoặc        │     │ Dispatcher kiểm tra,   │
+│ hướng dẫn qua  │     │ timeout thì Dispatcher │     │ chỉnh sửa và bấm       │
+│ App Driver     │     │ xử lý thủ công         │     │ "Approve & Send"       │
+└────────────────┘     └────────────────────────┘     └────────────────────────┘
+```
+
+---
+
+# 🧪 4. Operational Boundaries & Adversarial Testing
+
+Để đảm bảo an toàn vận hành, các ràng buộc được mã hóa trực tiếp trong **System Instruction** và **JSON Output**.
+
+## Quy tắc 1 — Kiểm soát mức pin khẩn cấp
+
+Nếu:
+
+```text
+SoC < 5%
+```
+
+AI **không được phép** hướng dẫn tài xế đến trạm sạc xa.
+
+Thay vào đó phải trả về:
+
+```json
+{
+  "action": "dispatch_mobile_charger"
+}
+```
+
+để kích hoạt cứu hộ pin lưu động.
+
+---
+
+## Quy tắc 2 — Human-in-the-Loop (HITL)
+
+Mọi phản hồi AI đều phải:
+
+- Có tiền tố:
+
+```text
+[DRAFT_ONLY]
+```
+
+- Đồng thời trả về:
+
+```json
+{
+  "require_human_approval": true
+}
+```
+
+Dispatcher phải phê duyệt trước khi gửi cho tài xế.
+
+---
+
+# 🏁 5. Phase 5 — AI Readiness & Evaluation
+
+## Checklist AI Readiness
+
+- ✅ **Data Readiness**
+  - Có API GPS xe.
+  - Có API trạng thái realtime của trạm sạc VinFast.
+
+- ✅ **Risk Control**
+  - 100% thông tin gửi cho tài xế phải qua bước Human-in-the-Loop.
+
+- ✅ **Stakeholder Readiness**
+  - Điều phối viên Xanh SM sẵn sàng áp dụng công cụ AI để giảm tải giờ cao điểm.
+
+---
+
+## Quyết định của Ban Dự Án
+
+- ✅ **GO**
+
+**Phê duyệt phát triển Prototype v1.0**
+
+---
+
+## Justification
+
+### 1. Chi phí - Lợi ích
+
+- Chi phí Gemini 2.5 Flash:
+
+```text
+≈ 0.00015 USD / lượt xử lý
+```
+
+- Tiết kiệm:
+  - khoảng **80%** thời gian xử lý thủ công.
+  - tương đương khoảng **600 USD/tháng** chi phí nhân công trực tiếp.
+  - giảm nguy cơ bồi thường do hủy chuyến.
+
+### 2. An toàn vận hành
+
+Nguy cơ hallucination của LLM được kiểm soát bằng hai lớp:
+
+1. **Rule Engine**
+
+```text
+IF SoC < 5%
+→ dispatch_mobile_charger
+```
+
+2. **Human-in-the-Loop**
+
+```text
+LLM Draft
+      ↓
+Dispatcher Review
+      ↓
+Approve & Send
+```
+
+Nhờ đó AI chỉ đóng vai trò **Copilot hỗ trợ điều phối**, không tự động đưa ra quyết định cuối cùng.
