@@ -8,7 +8,7 @@
 
 | Họ và tên      | MSSV        | Vai trò                     |
 | -------------- | ----------- | --------------------------- |
-| Trần Kiều Oanh | 2A202601417 | Leader / AI Prompt Engineer |
+| Trần Kiều Oanh | 2A202601417 | AI Prompt Engineer |
 
 **Bài toán lựa chọn Deep-Dive:**  
 **Card #1 — Xanh SM (GSM): Hệ thống Trợ lý Điều phối & Xử lý Sự cố Pin Khẩn cấp Thực địa**
